@@ -17,5 +17,9 @@ html:  clean $(HTML)
 %.pdf:  %.md $(LATEX_TEMPLATE)
 	python resume.py tex < $< | pandoc $(PANDOCARGS) --template=$(LATEX_TEMPLATE) -H resources/header.tex -o $@
 
+publish: html pdf
+	cp -rf * ~/scratch/threebean.org/resume/.
+	~/.virtualenvs/awscli/bin/aws s3 sync ~/scratch/threebean.org s3://threebean.org
+
 clean:
 	rm -f *.html *.pdf
